@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using Amazon.SecretsManager;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -95,8 +94,10 @@ namespace Checkout.FX.LoggingExample.Core.IoC
 
         private static void GetSecretsManagerConfig(IConfiguration configuration, AmazonSecretsManagerConfig smConfig)
         {
-            string serviceUrl = configuration["SecretsManager:ServiceUrl"];
-            string authenticationRegion = configuration["SecretsManager:AuthenticationRegion"];
+            string serviceUrl = configuration["SecretsManager:ServiceUrl"]
+                ?? throw new ArgumentNullException(nameof(serviceUrl), "Service URL was not configured");
+            string authenticationRegion = configuration["SecretsManager:AuthenticationRegion"]
+                ?? throw new ArgumentNullException(nameof(authenticationRegion), "Authentication Region was not configured");
 
             if (string.IsNullOrEmpty(serviceUrl))
                 return;
