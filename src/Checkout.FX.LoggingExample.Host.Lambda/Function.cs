@@ -30,7 +30,8 @@ namespace Checkout.FX.LoggingExample.Host.Lambda
             _serviceProvider = _environment is "local" or "localdocker" 
                 ? serviceCollection.BuildServiceProvider(new ServiceProviderOptions
                 {
-                    ValidateScopes = true, ValidateOnBuild = true
+                    ValidateScopes = true,
+                    ValidateOnBuild = true
                     
                 }) : serviceCollection.BuildServiceProvider();
         }
