@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Checkout.Diagnostics.Abstractions;
@@ -25,7 +26,17 @@ namespace Checkout.FX.LoggingExample.Core
         public async Task HandleAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Starting...");
-            _logger.LogInformation("Processing...");
+
+            var scopes = new Dictionary<string, object>
+            {
+                { "CurrencyPairs", new string[] { "USDGBP", "USDEUR" } }
+            };
+
+            using (_logger.BeginScope(scopes))
+            {
+                _logger.LogInformation("Processing...");
+            }
+
             _logger.LogInformation("Completed");
             await Task.Yield();
         }

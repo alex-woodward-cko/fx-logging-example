@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Checkout.Diagnostics.Abstractions;
+using Checkout.FX.LoggingExample.Core.UnitTests;
 using MELT;
 using Microsoft.Extensions.Logging;
 
@@ -32,32 +33,40 @@ namespace Checkout.FX.LoggingExample.Core.Tests
         [Fact]
         public async Task Handle_Successfully()
         {
+            // Arrange
+            var pairs = new string[] { "USDGBP", "USDEUR" };
+
             // Act
             await _handler.HandleAsync(CancellationToken.None);
 
             // Assert
             VerifyInfoLog_Starting();
-            VerifyInfoLog_Processing();
+            VerifyInfoLog_Processing(pairs);
             VerifyInfoLog_Completed();
         }
 
         private void VerifyInfoLog_Starting()
         {
-            var log = _loggerFactory.Sink.LogEntries.FirstOrDefault(log  => log.Message == "Starting...");
+            var log = _loggerFactory.GetLogs("Starting...").FirstOrDefault();
             log.Should().NotBeNull();
             log.LogLevel.Should().Be(LogLevel.Information);
         }
 
-        private void VerifyInfoLog_Processing()
+        private void VerifyInfoLog_Processing(string[] expectedCurrencyPairs)
         {
-            var log = _loggerFactory.Sink.LogEntries.FirstOrDefault(log => log.Message == "Processing...");
+            var log = _loggerFactory.GetLogs("Processing...").FirstOrDefault();
             log.Should().NotBeNull();
             log.LogLevel.Should().Be(LogLevel.Information);
+            log.TryGetPropertyValue<string[]>("CurrencyPairs", out var properties)
+                .Should().BeTrue();
+            properties.FirstOrDefault()
+                .Should().NotBeNullOrEmpty()
+                .And.Contain(expectedCurrencyPairs);
         }
 
         private void VerifyInfoLog_Completed()
         {
-            var log = _loggerFactory.Sink.LogEntries.FirstOrDefault(log => log.Message == "Completed");
+            var log = _loggerFactory.GetLogs("Completed").FirstOrDefault();
             log.Should().NotBeNull();
             log.LogLevel.Should().Be(LogLevel.Information);
         }
