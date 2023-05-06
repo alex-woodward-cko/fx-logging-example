@@ -1,0 +1,31 @@
+mode: ContinuousDeployment
+ignore:
+  sha: []
+branches:
+  master:
+    regex: main
+    mode: ContinuousDelivery
+    increment: Minor
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: true
+    tracks-release-branches: false
+    is-release-branch: false
+  feature:
+    regex: task?[/-]
+    mode: ContinuousDelivery
+    tag: useBranchName
+    increment: Inherit
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: false
+    tracks-release-branches: false
+    is-release-branch: false
+  pull-request:
+    regex: (pull|pull\-requests|pr)[/-]
+    mode: ContinuousDelivery
+    tag: pr
+    increment: Inherit
+    prevent-increment-of-merged-branch-version: false
+    tag-number-pattern: '[/-](?<number>\d+)[-/]'
+    track-merge-target: false
+    tracks-release-branches: false
+    is-release-branch: false

@@ -1,0 +1,16 @@
+<Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" Condition="Exists($([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../')))" />
+
+    <!-- Global settings -->
+    <PropertyGroup>
+        <!-- Treat all warnigns as errors -->
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <!-- Don't make missing XML docs a fatal build error, but still surface so we have visibility into undocumented APIs. -->
+        <WarningsNotAsErrors>$(WarningsNotAsErrors);CS1591</WarningsNotAsErrors>
+        <!-- xUnit1004 = warns about skipped tests. Make this a non-fatal build warning. -->
+        <WarningsNotAsErrors>$(WarningsNotAsErrors);xUnit1004</WarningsNotAsErrors>
+        <!-- Delcare the root of the repo -->
+        <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+    </PropertyGroup>
+
+</Project>

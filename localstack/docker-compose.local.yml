@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  localstack:
+    image: localstack/localstack:0.12.12
+    environment:
+      - EDGE_PORT=4584
+      - SERVICES=secretsmanager,lambda
+      - DEFAULT_REGION=eu-north-1 # Required for awslocal to seed to correct regions
+      - LAMBDA_EXECUTOR=docker
+      - LAMBDA_DOCKER_NETWORK=localstack-network
+      - LAMBDA_CONTAINER_REGISTRY=mlupin/docker-lambda
+      - AWS_ACCESS_KEY_ID=xxx # Required for other services (e.g. Rates API) to get credentials
+      - AWS_SECRET_ACCESS_KEY=xxx
+    volumes:
+      - ./content/docker-entrypoint-initaws.d:/docker-entrypoint-initaws.d
+      - ./content/setup:/setup
+      - /var/run/docker.sock:/var/run/docker.sock # Required for Lambda execution
+    ports:
+      - 4584:4584
+    networks:
+      - localstack-network
+
+networks:
+  localstack-network:
+    name: localstack-network # Explicitly define network name to stop docker-compose automatically adding a prefix - we need it explicit so we can reference it
+    driver: bridge
+
+# Additional Information
+# This setting needs to be localdocker for other FX containers because appsettings.local.json in the image has http://localhost as the secrets manager service URL
+# When these apps run in their own containers in this network, trying to access http://localhost will just loopback to the current container the app is running in and won't work
+# Instead we need to override it with the values from appsettings.localdocker.json so they correctly point to http://localstack for secrets instead
+# The DNS will resolve correctly for this and point to the localstack container here instead

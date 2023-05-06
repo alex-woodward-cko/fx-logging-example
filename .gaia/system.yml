@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: fx-logging-example
+  description: "FX Logging Example"
+  tags:
+    - dotnet
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+spec:
+  owner: fx-team

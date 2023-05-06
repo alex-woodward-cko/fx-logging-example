@@ -1,0 +1,27 @@
+name: Build
+
+on:
+    pull_request:
+        branches:
+            - "*"
+    workflow_dispatch:
+
+jobs:
+    build:
+        uses: cko-fx-payouts/fx-gh-actions-workflows/.github/workflows/ci-build-lambda.yml@main
+        secrets: inherit
+        with:
+            # Please check usage and full list of inputs for this workflow  and update as necessary.
+            # https://github.com/cko-fx-payouts/fx-gh-actions-workflows
+            DOTNET_VERSION: "6.0.x"
+            FETCH_ALL: false
+            FUNCTION_NAME: "fx-logging-example"
+            FUNCTION_PROJECT_PATH: "./src/Checkout.FX.LoggingExample.Host.Lambda"
+            DOCKER_SLEEP_TIME: "30s"
+            INCLUDE_ACCEPTANCE_TESTS: true
+            DOCKER_COMPOSE_FILENAME: "localstack/docker-compose.github.yml"
+            S3_BUCKET_NAME: "ckotech-fxp-fx-lambda-repository"
+            PACKAGE_DIRECTORY_IN_S3: "fx-logging-example"
+            AWS_BUCKET_REGION: "eu-west-1"
+            SONAR_QUBE_ENABLED: true
+            

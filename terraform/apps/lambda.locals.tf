@@ -1,0 +1,1 @@
+locals { lambda_insights_arn = "arn:aws:lambda:eu-west-1:580247275435:layer:LambdaInsightsExtension:16" }

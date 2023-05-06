@@ -1,0 +1,14 @@
+name: Build techdocs
+on:
+  workflow_dispatch:
+    push:
+      branches:
+        - main
+
+jobs:
+  build_publish_techdocs:
+    uses: cko-fx-payouts/fx-gh-actions-workflows/.github/workflows/publish-techdocs.yml@main
+    secrets: inherit
+    with:
+      ENTITY_KIND: service
+      ENTITY_NAME: fx-logging-example

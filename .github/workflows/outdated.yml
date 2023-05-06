@@ -1,0 +1,13 @@
+name: Outdated
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # 6am every monday
+
+jobs:
+  outdated:
+      uses: cko-fx-payouts/fx-gh-actions-workflows/.github/workflows/ci-outdated.yml@main
+      secrets: inherit
+      with:
+          DOTNET_VERSION: "6.0.x"

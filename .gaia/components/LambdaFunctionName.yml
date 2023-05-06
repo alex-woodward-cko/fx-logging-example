@@ -1,0 +1,29 @@
+#TODO update the filename to fx-logging-example eg: fx-rates-validator
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+    name: fx-logging-example
+    description:
+    links:
+    - url: https://github.com/cko-fx-payouts/fx-logging-example
+      title: GitHub Repo of FX Logging Example
+      type: source
+    - url: https://github.com/cko-fx-payouts/fx-logging-example/actions
+      title: CI Pipeline
+      type: ci
+    - url: https://fxp-octopus.mgmt.ckotech.co/app#/Spaces-1/projects/fx-logging-example/deployments
+      title: CD Pipeline
+      type: cd
+    - url: # TODO Update 
+      title: Datadog Dashboard
+      type: dashboard
+    - url: # TODO Update
+      title: Datadog Logs
+      type: logs
+
+spec:
+    type: service
+    lifecycle: general-availability
+    owner: fx-team
+    system: fx-logging-example

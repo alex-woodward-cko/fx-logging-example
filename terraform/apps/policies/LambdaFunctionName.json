@@ -1,0 +1,28 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret"
+            ],
+            "Effect": "Allow",
+            "Resource": ["${secrets_arn}"]
+        },
+        {
+            "Action": ["kms:GenerateDataKey"],
+            "Effect": "Allow",
+            "Resource": ["${kms_arn}"]
+        },
+        {
+            "Action": ["kms:Decrypt"],
+            "Effect": "Allow",
+            "Resource": ["${kms_arn}"]
+        },
+        {
+            "Action": ["sqs:SendMessage"],
+            "Effect": "Allow",
+            "Resource": ["${dlq_arn}"]
+        }
+    ]
+}

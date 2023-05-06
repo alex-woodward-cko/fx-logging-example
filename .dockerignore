@@ -1,0 +1,9 @@
+.vs/
+.idea/
+**/bin/
+**/obj/
+**/out/
+**/TestResults/
+artifacts/
+.idea/
+coverage-results/

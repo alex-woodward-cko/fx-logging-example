@@ -1,0 +1,9 @@
+site_name: fx-logging-example
+nav:
+  - Project README: README.md
+plugins:
+  - techdocs-core
+
+markdown_extensions:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji

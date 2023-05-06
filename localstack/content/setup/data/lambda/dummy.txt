@@ -1,0 +1,3 @@
+This is a dummy file required to initially set up a Lambda via Terraform.
+
+The rest of the deployment will happen via CI/CD.
