@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Checkout.Diagnostics.Abstractions;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Checkout.FX.LoggingExample.Core
 {
@@ -15,20 +15,18 @@ namespace Checkout.FX.LoggingExample.Core
         /// <summary>
         /// Constructs Handler class
         /// </summary>
-        public Handler(
-            ILogger logger, IMetrics metrics)
+        public Handler(ILogger logger, IMetrics metrics)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _logger.ForContext<Handler>();
-            _metrics = metrics;
+            _metrics = metrics ?? throw new ArgumentNullException(nameof(metrics));
         }
 
         /// <inheritdoc />
         public async Task HandleAsync(CancellationToken cancellationToken)
         {
-            _logger.Information("The fx-logging-example Lambda starts");
-            _logger.Information("Hello world!");
-            _logger.Information("The fx-logging-example Lambda finishes");
+            _logger.LogInformation("Starting...");
+            _logger.LogInformation("Processing...");
+            _logger.LogInformation("Completed");
             await Task.Yield();
         }
     }
