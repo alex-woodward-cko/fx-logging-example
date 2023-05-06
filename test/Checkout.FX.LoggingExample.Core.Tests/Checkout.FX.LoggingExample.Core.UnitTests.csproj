@@ -7,8 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="6.11.0" />
         <PackageReference Include="MELT.Serilog" Version="0.8.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+        <PackageReference Include="Moq" Version="4.18.4" />
         <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.reporters" Version="2.4.2" />
         <PackageReference Include="xunit.runner.utility" Version="2.4.2" />     
@@ -18,6 +20,10 @@
         </PackageReference>
         <PackageReference Include="coverlet.msbuild" Version="3.2.0" />
         <PackageReference Include="coverlet.collector" Version="3.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Checkout.FX.LoggingExample.Core\Checkout.FX.LoggingExample.Core.csproj" />
     </ItemGroup>
 
 </Project>
