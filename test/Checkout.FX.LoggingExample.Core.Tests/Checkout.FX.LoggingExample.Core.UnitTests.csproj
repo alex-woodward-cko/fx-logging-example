@@ -8,11 +8,10 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.11.0" />
-        <PackageReference Include="MELT.Serilog" Version="0.8.0" />
-        <PackageReference Include="MELT.Xunit" Version="0.8.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
         <PackageReference Include="Moq" Version="4.18.4" />
+        <PackageReference Include="Serilog.Sinks.InMemory" Version="0.11.0" />
+        <PackageReference Include="Serilog.Sinks.InMemory.Assertions" Version="0.11.0" />
         <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.reporters" Version="2.4.2" />
         <PackageReference Include="xunit.runner.utility" Version="2.4.2" />     

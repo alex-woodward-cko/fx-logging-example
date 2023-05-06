@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Checkout.Diagnostics.Abstractions;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Context;
 
 namespace Checkout.FX.LoggingExample.Core
 {
@@ -25,17 +25,15 @@ namespace Checkout.FX.LoggingExample.Core
         /// <inheritdoc />
         public async Task HandleAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Starting...");
+            _logger.Information("Starting...");
 
-            using (_logger.BeginScope(LoggingUtlities.AddAttribute(
-                (Constants.Log.Properties.CurrencyPairs, new string[] { "USDGBP", "USDEUR" })
-                )))
+            using (LogContext.PushProperty(Constants.Log.Properties.CurrencyPairs, new string[] { "USDGBP", "USDEUR" }))
             {
-                _logger.LogInformation("Processing...");
+                _logger.Information("Processing...");
                 await Task.Delay(1000);
             }
 
-            _logger.LogInformation("Completed");
+            _logger.Information("Completed");
             await Task.Yield();
         }
     }

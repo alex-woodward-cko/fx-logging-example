@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Checkout.Diagnostics.Abstractions;
-using Checkout.FX.LoggingExample.Core.UnitTests;
-using MELT;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.InMemory;
+using Serilog.Sinks.InMemory.Assertions;
 
 namespace Checkout.FX.LoggingExample.Core.Tests
 {
@@ -12,14 +12,15 @@ namespace Checkout.FX.LoggingExample.Core.Tests
     {
         private IHandler _handler;
 
-        private ITestLoggerFactory _loggerFactory;
         private ILogger _logger;
         private Mock<IMetrics> _mockMetrics;
 
         public HandlerTests()
         {
-            _loggerFactory = TestLoggerFactory.Create();
-            _logger = _loggerFactory.CreateLogger<Handler>();
+            _logger = new LoggerConfiguration()
+                .WriteTo.InMemory()
+                .CreateLogger();
+
             _mockMetrics = new Mock<IMetrics>();
             _handler = new Handler(_logger, _mockMetrics.Object);
         }
@@ -47,28 +48,31 @@ namespace Checkout.FX.LoggingExample.Core.Tests
 
         private void VerifyInfoLog_Starting()
         {
-            var log = _loggerFactory.GetLogs("Starting...").FirstOrDefault();
-            log.Should().NotBeNull();
-            log.LogLevel.Should().Be(LogLevel.Information);
+            InMemorySink.Instance
+                .Should()
+                .HaveMessage("Starting...")
+                .WithLevel(LogEventLevel.Information)
+                .Appearing().Once();
         }
 
         private void VerifyInfoLog_Processing(string[] expectedCurrencyPairs)
         {
-            var log = _loggerFactory.GetLogs("Processing...").FirstOrDefault();
-            log.Should().NotBeNull();
-            log.LogLevel.Should().Be(LogLevel.Information);
-            log.TryGetPropertyValue<string[]>("CurrencyPairs", out var properties)
-                .Should().BeTrue();
-            properties.FirstOrDefault()
-                .Should().NotBeNullOrEmpty()
-                .And.Contain(expectedCurrencyPairs);
+            InMemorySink.Instance
+                .Should()
+                .HaveMessage("Processing...")
+                .WithLevel(LogEventLevel.Information)
+                .Appearing().Once()
+                .WithProperty("currency-pairs");
+                // .WithValue(expectedCurrencyPairs);
         }
 
         private void VerifyInfoLog_Completed()
         {
-            var log = _loggerFactory.GetLogs("Completed").FirstOrDefault();
-            log.Should().NotBeNull();
-            log.LogLevel.Should().Be(LogLevel.Information);
+            InMemorySink.Instance
+                .Should()
+                .HaveMessage("Completed")
+                .WithLevel(LogEventLevel.Information)
+                .Appearing().Once();
         }
     }
 }

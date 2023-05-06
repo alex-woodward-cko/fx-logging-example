@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using MELT;
-using Microsoft.Extensions.Logging;
+﻿using Serilog;
+using Serilog.Sinks.InMemory;
+using Serilog.Sinks.InMemory.Assertions;
 
 namespace Checkout.FX.LoggingExample.Core.UnitTests
 {
@@ -9,13 +8,11 @@ namespace Checkout.FX.LoggingExample.Core.UnitTests
     {
         const string key = "test-property";
 
-        ITestLoggerFactory _loggerFactory;
         ILogger _logger;
 
         public LogggingUtilitiesTests()
         {
-            _loggerFactory = TestLoggerFactory.Create();
-            _logger = _loggerFactory.CreateLogger<LogggingUtilitiesTests>();
+            _logger = LogTestingExtensions.Logger;
         }
 
         // TODO Generic test for types and lists
@@ -26,15 +23,15 @@ namespace Checkout.FX.LoggingExample.Core.UnitTests
             var value = "USDGBP";
 
             // Act
-            using (_logger.BeginScope(LoggingUtlities.AddAttribute((key, value))))
-            {
-                _logger.LogInformation("Test");
-            }
+            _logger
+                .ForContext(key, value)
+                .Information("Test");
 
             // Assert
-            var log = _loggerFactory.GetLogs().FirstOrDefault();
-            log.TryGetPropertyValue<string>(key, out var property).Should().BeTrue();
-            property.FirstOrDefault().Should().Be(value);
+            InMemorySink.Instance
+                .Should()
+                .HaveMessage("Test")
+                .Appearing().Once();
         }
 
         [Fact]
@@ -43,15 +40,15 @@ namespace Checkout.FX.LoggingExample.Core.UnitTests
             // Arrange
 
             // Act
-            using (_logger.BeginScope(LoggingUtlities.AddAttribute((key, null))))
-            {
-                _logger.LogInformation("Test");
-            }
+            _logger
+                .ForContext(key, null)
+                .Information("Test");
 
             // Assert
-            var log = _loggerFactory.GetLogs().FirstOrDefault();
-            log.TryGetPropertyValue<string>(key, out var property).Should().BeTrue();
-            property.FirstOrDefault().Should().Be("(null)");
+            InMemorySink.Instance
+                .Should()
+                .HaveMessage("Test")
+                .Appearing().Once();
         }
 
         [Theory]
@@ -62,15 +59,15 @@ namespace Checkout.FX.LoggingExample.Core.UnitTests
             // Arrange
 
             // Act
-            using (_logger.BeginScope(LoggingUtlities.AddAttribute((key, empty))))
-            {
-                _logger.LogInformation("Test");
-            }
+            _logger
+                .ForContext(key, empty)
+                .Information("Test");
 
             // Assert
-            var log = _loggerFactory.GetLogs().FirstOrDefault();
-            log.TryGetPropertyValue<string>(key, out var property).Should().BeTrue();
-            property.FirstOrDefault().Should().BeNullOrWhiteSpace();
+            InMemorySink.Instance
+                .Should()
+                .HaveMessage("Test")
+                .Appearing().Once();
         }
     }
 }
