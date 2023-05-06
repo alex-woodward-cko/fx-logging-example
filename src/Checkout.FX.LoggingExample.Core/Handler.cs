@@ -32,6 +32,7 @@ namespace Checkout.FX.LoggingExample.Core
                 )))
             {
                 _logger.LogInformation("Processing...");
+                await Task.Delay(1000);
             }
 
             _logger.LogInformation("Completed");
