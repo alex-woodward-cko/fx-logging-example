@@ -9,10 +9,22 @@ namespace Checkout.FX.LoggingExample.AcceptanceTests
         [Fact]
         public void HandlerDoesProcess()
         {
-            this.Given("Operating Normally")
-                .When("Lambda is Invoked")
-                .Then("Process Successfully")
+            this.Given(s => s.NormalOperation())
+                .When(s => s.LambdaIsInvoked())
+                .Then(s => s.SuccessfullyProcess())
                 .BDDfy();
+        }
+
+        private void NormalOperation()
+        {
+        }
+
+        private void LambdaIsInvoked()
+        {
+        }
+
+        private void SuccessfullyProcess()
+        {
         }
     }
 }

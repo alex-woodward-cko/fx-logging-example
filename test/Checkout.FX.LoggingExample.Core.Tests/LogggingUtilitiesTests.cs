@@ -18,6 +18,25 @@ namespace Checkout.FX.LoggingExample.Core.UnitTests
             _logger = _loggerFactory.CreateLogger<LogggingUtilitiesTests>();
         }
 
+        // TODO Generic test for types and lists
+        [Fact]
+        public void IncludeAttributeHasValue()
+        {
+            // Arrange
+            var value = "USDGBP";
+
+            // Act
+            using (_logger.BeginScope(LoggingUtlities.AddAttribute((key, value))))
+            {
+                _logger.LogInformation("Test");
+            }
+
+            // Assert
+            var log = _loggerFactory.GetLogs().FirstOrDefault();
+            log.TryGetPropertyValue<string>(key, out var property).Should().BeTrue();
+            property.FirstOrDefault().Should().Be(value);
+        }
+
         [Fact]
         public void NullOrEmptyAttributeHasValue()
         {

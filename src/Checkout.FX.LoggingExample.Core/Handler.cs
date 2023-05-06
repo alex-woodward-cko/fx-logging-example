@@ -27,12 +27,9 @@ namespace Checkout.FX.LoggingExample.Core
         {
             _logger.LogInformation("Starting...");
 
-            var scopes = new Dictionary<string, object>
-            {
-                { "CurrencyPairs", new string[] { "USDGBP", "USDEUR" } }
-            };
-
-            using (_logger.BeginScope(scopes))
+            using (_logger.BeginScope(LoggingUtlities.AddAttribute(
+                (Constants.Log.Properties.CurrencyPairs, new string[] { "USDGBP", "USDEUR" })
+                )))
             {
                 _logger.LogInformation("Processing...");
             }
