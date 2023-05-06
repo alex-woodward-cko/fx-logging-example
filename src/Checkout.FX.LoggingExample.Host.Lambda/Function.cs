@@ -46,13 +46,14 @@ namespace Checkout.FX.LoggingExample.Host.Lambda
             var handler = scope.ServiceProvider.GetRequiredService<IHandler>();
             var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
             logger.ForContext<Function>();
+
             try
             {
                 await handler.HandleAsync(cancellationToken);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logger.Fatal(e, "Global exception handler");
+                logger.Fatal(ex, "Global exception handler");
                 throw;
             }
         }
@@ -69,10 +70,12 @@ namespace Checkout.FX.LoggingExample.Host.Lambda
             }
 
             var token = cancellationTokenSource.Token;
+
             token.Register(() =>
             {
                 Console.WriteLine("Cancellation was requested. Exiting gracefully.");
             });
+
             return token;
         }
 
