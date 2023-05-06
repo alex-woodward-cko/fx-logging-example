@@ -5,7 +5,7 @@ using Amazon.Lambda.Core;
 using Checkout.FX.LoggingExample.Core;
 using Checkout.FX.LoggingExample.Core.IoC;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -46,15 +46,14 @@ namespace Checkout.FX.LoggingExample.Host.Lambda
             using var scope = _serviceProvider.CreateScope();
             var handler = scope.ServiceProvider.GetRequiredService<IHandler>();
             var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
-            logger.ForContext<Function>();
-
+            
             try
             {
                 await handler.HandleAsync(cancellationToken);
             }
             catch (Exception ex)
             {
-                logger.Fatal(ex, "Global exception handler");
+                logger.LogCritical(ex, "Global Exception Occured");
                 throw;
             }
         }
@@ -72,10 +71,7 @@ namespace Checkout.FX.LoggingExample.Host.Lambda
 
             var token = cancellationTokenSource.Token;
 
-            token.Register(() =>
-            {
-                Console.WriteLine("Cancellation was requested. Exiting gracefully.");
-            });
+            token.Register(() => { Console.WriteLine("Cancellation was requested. Exiting gracefully."); });
 
             return token;
         }
