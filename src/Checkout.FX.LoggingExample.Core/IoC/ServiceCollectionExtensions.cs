@@ -57,6 +57,7 @@ namespace Checkout.FX.LoggingExample.Core.IoC
             {
                 GetSecretsManagerConfig(config, smConfig);
             }
+
             try
             {
                 builder.AddConfigurationFromSecretsManager("fx-logging-example", configEditor: ConfigEditor);
@@ -66,6 +67,7 @@ namespace Checkout.FX.LoggingExample.Core.IoC
             }
             catch (Exception e)
             {
+                // TODO Fix Message
                 Console.WriteLine($"Failed to load AWS Secrets to memory. {e.Message}");
                 throw;
             }
@@ -87,6 +89,7 @@ namespace Checkout.FX.LoggingExample.Core.IoC
                 .Enrich.FromLogContext()
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
+
             serviceCollection.TryAddScoped(_ => Log.Logger);
 
             return serviceCollection;
