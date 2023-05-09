@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Checkout.Diagnostics.Abstractions;
 using Serilog;
@@ -17,6 +18,7 @@ namespace Checkout.FX.LoggingExample.Core.Tests
 
         public HandlerTests()
         {
+            InMemorySink.Instance?.Dispose();
             _logger = new LoggerConfiguration()
                 .WriteTo.InMemory()
                 .CreateLogger();
@@ -62,8 +64,8 @@ namespace Checkout.FX.LoggingExample.Core.Tests
                 .HaveMessage("Processing...")
                 .WithLevel(LogEventLevel.Information)
                 .Appearing().Once()
-                .WithProperty("currency-pairs");
-                // .WithValue(expectedCurrencyPairs);
+                .WithProperty("currency-pairs")
+                .WithValue(expectedCurrencyPairs);
         }
 
         private void VerifyInfoLog_Completed()

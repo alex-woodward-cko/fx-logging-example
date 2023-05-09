@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Checkout.Diagnostics.Abstractions;
 using Serilog;
-using Serilog.Context;
+using Serilog.Events;
 
 namespace Checkout.FX.LoggingExample.Core
 {
@@ -27,11 +27,13 @@ namespace Checkout.FX.LoggingExample.Core
         {
             _logger.Information("Starting...");
 
-            using (LogContext.PushProperty(Constants.Log.Properties.CurrencyPairs, new string[] { "USDGBP", "USDEUR" }))
-            {
-                _logger.Information("Processing...");
-                await Task.Delay(1000);
-            }
+            var pairs = new string[] { "USDGBP", "USDEUR" };
+
+            _logger
+                .ForContext(LogEventLevel.Information, Constants.Log.Properties.CurrencyPairs, pairs, true)
+                .Information("Processing...");
+
+            await Task.Delay(1000);
 
             _logger.Information("Completed");
             await Task.Yield();
